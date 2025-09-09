@@ -71,7 +71,8 @@ MYSQL_PWD="${SRC_PASS:-}" mydumper \
   -F "${CHUNK_MB}" -G -R -E \
   -L "${LOCAL_DIR}/mydumper.log" \
   --regex "${REGEX_EXCLUDE}" \
-  --ssl
+  --ssl \
+  --kill-long-queries
 
 # ---------- upload (batch) ----------
 log "Uploading ${LOCAL_DIR} → account=${AZ_ACCOUNT} container=${AZ_CONTAINER}"
