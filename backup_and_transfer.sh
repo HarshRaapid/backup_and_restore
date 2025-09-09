@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -euox pipefail
 
 # ============================================
 # MySQL → mydumper → Azure Storage (upload-batch)
@@ -70,12 +70,15 @@ MYSQL_PWD="${SRC_PASS:-}" mydumper \
   -o "${LOCAL_DIR}" -t "${THREADS}" --compress \
   -F "${CHUNK_MB}" -G -R -E \
   -L "${LOCAL_DIR}/mydumper.log" \
-  --regex "${REGEX_EXCLUDE}" \
-  --ssl \
-  --kill-long-queries
+  -B ra_audit_apigateway \
+  -T cm_code \
+  --ssl --ssl-mode=REQUIRED
+
 
 # ---------- upload (batch) ----------
+
 log "Uploading ${LOCAL_DIR} → account=${AZ_ACCOUNT} container=${AZ_CONTAINER}"
+
 az storage blob upload-batch \
   --account-name "${AZ_ACCOUNT}" \
   --destination "${AZ_CONTAINER}" \
