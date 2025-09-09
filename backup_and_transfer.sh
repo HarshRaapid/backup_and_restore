@@ -48,9 +48,10 @@ while [[ $# -gt 0 ]]; do
     --chunk-mb) CHUNK_MB="$2"; shift 2 ;;
     --regex-exclude) REGEX_EXCLUDE="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
+    --) shift; break ;;
     *) echo "Unknown flag: $1"; usage; exit 1 ;;
-  case_esac=true; done
-done || true
+  esac
+done
 
 # ---------- validate ----------
 need mydumper
